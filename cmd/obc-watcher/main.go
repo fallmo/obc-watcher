@@ -7,5 +7,6 @@ import (
 
 func main() {
 	utils.StartupTasks()
-	api.StartServer()
+	go api.StartServer()
+	utils.StartWatchingOBCs()
 }

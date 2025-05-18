@@ -56,8 +56,8 @@ func connectRabbitMq() {
 }
 
 type amqpMessage struct {
-	Kind string            `json:"kind"`
-	Data map[string]string `json:"data"`
+	Kind string                 `json:"kind"`
+	Data map[string]interface{} `json:"data"`
 }
 
 func PushAMQPMessage(data amqpMessage) {

@@ -29,5 +29,4 @@ func StartupTasks() {
 	verifyEnvironment()
 	connectRabbitMq()
 	connectKubernetes()
-	go watchObjectBucketClaims()
 }

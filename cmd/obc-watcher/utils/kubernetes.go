@@ -81,7 +81,7 @@ func connectKubernetes() {
 
 }
 
-func watchObjectBucketClaims() {
+func StartWatchingOBCs() {
 	if cs == nil {
 		log.Fatal("client is nil")
 	}
@@ -125,7 +125,11 @@ func watchObjectBucketClaims() {
 		PushAMQPMessage(
 			amqpMessage{
 				Kind: "objectbucketclaim-bound",
-				Data: map[string]string{"resourceId": string(obc.UID)}}, // send bucket id from label too incase of manual provisionning?
+				Data: map[string]interface{}{
+					"uuid":        string(obc.UID),
+					"annotations": obc.Annotations,
+				},
+			},
 		)
 
 		patch := []map[string]interface{}{
