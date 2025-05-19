@@ -8,5 +8,6 @@ import (
 func main() {
 	utils.StartupTasks()
 	go api.StartServer()
-	utils.StartWatchingOBCs()
+	// utils.StartWatchingOBCs()
+	utils.StartOBCInformer()
 }
