@@ -3,13 +3,14 @@ package utils
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
 func loadEnvironment() {
 	err := godotenv.Load()
-	if err != nil {
+	if err != nil && !strings.Contains(err.Error(), "no such file or directory") {
 		log.Println("Error loading .env file ", err)
 	}
 }
