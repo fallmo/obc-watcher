@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: obc-watcher
-    namespace: obc-watcher
+    namespace: "@NAMESPACE"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

@@ -9,7 +9,7 @@ metadata:
     app: obc-watcher
     app.openshift.io/runtime: golang
   name: obc-watcher
-  namespace: obc-watcher
+  namespace: "@NAMESPACE"
 spec:
   replicas: 1
   selector:
@@ -29,3 +29,5 @@ spec:
           env:
             - name: RABBITMQ_URI
               value: amqp://rabbitmq:5672
+            - name: LABEL_KEY
+              value: pending-bind-alert
