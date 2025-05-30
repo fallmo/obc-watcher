@@ -27,8 +27,12 @@ func verifyEnvironment() {
 	}
 
 	for i := 0; i < len(optionalVars); i++ {
-		if os.Getenv(optionalVars[i]) == "" {
-			fmt.Printf("Missing optional environment variable '%v'.\n", optionalVars[i])
+		key := optionalVars[i]
+		val := os.Getenv(key)
+		if val == "" {
+			fmt.Printf("Missing optional environment variable '%v'.\n", key)
+		} else {
+			fmt.Printf("Running with %v=%v \n", key, val)
 		}
 	}
 }
