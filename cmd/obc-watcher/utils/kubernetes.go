@@ -24,8 +24,6 @@ import (
 var cs **dynamic.DynamicClient
 var scheme = runtime.NewScheme()
 
-const labelKey = "pending-bind-alert"
-
 var OBCGroupVersionResource = schema.GroupVersionResource{
 	Group:    "objectbucket.io",
 	Version:  "v1alpha1",
@@ -90,6 +88,7 @@ func StartWatchingOBCs() {
 
 	client := *cs
 
+	labelKey := getLabelKey()
 	watchInterface, err := client.Resource(OBCGroupVersionResource).Watch(context.TODO(), v1.ListOptions{
 		LabelSelector: labels.SelectorFromSet(map[string]string{
 			labelKey: "true",
@@ -137,6 +136,7 @@ func TriggerReconcile() {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
+	labelKey := getLabelKey()
 	data, err := client.Resource(OBCGroupVersionResource).List(
 		ctx,
 		v1.ListOptions{
@@ -172,6 +172,7 @@ func StartOBCInformer() {
 
 	client := *cs
 
+	labelKey := getLabelKey()
 	informer := dynamicinformer.NewFilteredDynamicInformer(
 		client,
 		OBCGroupVersionResource,
@@ -255,6 +256,7 @@ func handleBoundOBC(obj **obcv1alpha1.ObjectBucketClaim) {
 		},
 	)
 
+	labelKey := getLabelKey()
 	patch := []map[string]interface{}{
 		{
 			"op":   "remove",
@@ -290,4 +292,13 @@ func convertToOBC(obj *unstructured.Unstructured) (*obcv1alpha1.ObjectBucketClai
 	obc := &obcv1alpha1.ObjectBucketClaim{}
 	err := runtime.DefaultUnstructuredConverter.FromUnstructured(obj.Object, obc)
 	return obc, err
+}
+
+func getLabelKey() string {
+	labelKey := os.Getenv("LABEL_KEY")
+	if labelKey != "" {
+		return labelKey
+	} else {
+		return "pending-bind-alert"
+	}
 }

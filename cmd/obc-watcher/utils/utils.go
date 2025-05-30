@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -17,10 +18,17 @@ func loadEnvironment() {
 
 func verifyEnvironment() {
 	requiredVars := [1]string{"RABBITMQ_URI"}
+	optionalVars := [1]string{"LABEL_KEY"}
 
 	for i := 0; i < len(requiredVars); i++ {
 		if os.Getenv(requiredVars[i]) == "" {
 			log.Fatalf("ERROR: Missing environment variable %v\n", requiredVars[i])
+		}
+	}
+
+	for i := 0; i < len(optionalVars); i++ {
+		if os.Getenv(optionalVars[i]) == "" {
+			fmt.Printf("Missing optional environment variable '%v'.\n", optionalVars[i])
 		}
 	}
 }
