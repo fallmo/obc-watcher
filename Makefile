@@ -31,3 +31,13 @@ deploy-s390x:
 	sed 's/@NAMESPACE/$(NAMESPACE)/' manifests/serviceaccount.yaml | kubectl apply -f -
 	sed 's/@NAMESPACE/$(NAMESPACE)/' manifests/clusterrolebinding.yaml | kubectl apply -f -
 	cat manifests/deployment.yaml | sed 's/@NAMESPACE/$(NAMESPACE)/'| sed 's/obc-watcher:v1/obc-watcher:v1-s390x/' | kubectl apply -f -
+
+undeploy:
+	if [ "$(NAMESPACE)" = "" ]; then \
+		echo "ERROR: MISSING NAMESPACE"; exit 1; \
+	fi;
+
+	kubectl delete -f manifests/clusterrole.yaml
+	sed 's/@NAMESPACE/$(NAMESPACE)/' manifests/serviceaccount.yaml | kubectl delete -f -
+	sed 's/@NAMESPACE/$(NAMESPACE)/' manifests/clusterrolebinding.yaml | kubectl delete -f -
+	sed 's/@NAMESPACE/$(NAMESPACE)/' manifests/deployment.yaml | kubectl delete -f -
